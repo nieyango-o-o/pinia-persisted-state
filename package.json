@@ -1,0 +1,31 @@
+{
+  "name": "@jiuyue-/pinia-persisted-state",
+  "description": "Persisted state for Pinia",
+  "version": "1.0.3",
+  "main": "dist/pinia-persisted-state.js",
+  "module": "dist/pinia-persisted-state.esm.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "devDependencies": {
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "rollup": "^3.12.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "pinia": "^2.0.30"
+  },
+  "peerDependencies": {
+    "pinia": "^2.0.30"
+  }
+}
