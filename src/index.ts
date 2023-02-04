@@ -1,5 +1,6 @@
 import { PiniaPluginContext } from "pinia"
 
+// 以后可能添加cookie等方式
 type PersistStorage = Storage;
 
 declare type PersistOptions = {
@@ -22,9 +23,20 @@ const defaultStorage = localStorage;
 
 const isBoolean = (target: any) => typeof target === "boolean";
 
+const defaultPiniaName = 'pinia'
+
+const getPiniaStore = (storage: PersistStorage) => {
+  const store = storage.getItem(defaultPiniaName)
+  if (store) {
+    return JSON.parse(store)
+  }
+  return {}
+}
+
 const updateStorage = (store: Store, options: PersistOptions) => {
   const { paths, storage = defaultStorage, key = store.$id } = options;
   let state: StoreState = store.$state;
+  let piniaStore = getPiniaStore(storage)
 
   if (paths && Array.isArray(paths) && paths.length > 0) {
     state = paths?.reduce((obj, key) => {
@@ -32,8 +44,7 @@ const updateStorage = (store: Store, options: PersistOptions) => {
       return obj;
     }, {} as StoreState);
   }
-
-  storage.setItem(key, JSON.stringify(state));
+  storage.setItem(defaultPiniaName, JSON.stringify(Object.assign(piniaStore, {[key]: state})));
 };
 
 // options中的persist 选项可以是一个布尔值，也可以是一个对象。
@@ -110,9 +121,10 @@ const createPersistedState = ({ options, store }: PiniaPluginContext) => {
 
   const { key = storeId, storage = defaultStorage } = persistOptions;
 
-  const result = storage?.getItem(key);
-  
-  result && store.$patch(JSON.parse(result));
+  const piniaStore = getPiniaStore(storage)
+
+  const result = piniaStore[key];
+  result && store.$patch(result);
 
   store.$subscribe(() => updateStorage(store, persistOptions));
 };
