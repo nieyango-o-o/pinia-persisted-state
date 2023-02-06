@@ -16,25 +16,35 @@ npm i @jiuyue-/pinia-persisted-state
 
 ```ts
 // store/index.ts
-import { createPinia } from "pinia";
+import { createPinia } from 'pinia'
 
-import createPersistedState from "@jiuyue-/pinia-persisted-state";
+import createPersistedState from '@jiuyue-/pinia-persisted-state'
 
-const pinia = createPinia();
+const pinia = createPinia()
 
-pinia.use(createPersistedState);
+// 1. 可以直接注册
+// pinia.use(createPersistedState);
 
-export default pinia;
+// 2. 也可以传入`PersistConfig`配置
+pinia.use((context) =>
+  createPersistedState(context, {
+    // 存储数据的key
+    name: 'custom-pinia',
+    // 默认使用存储方式
+    storage: sessionStorage,
+  })
+)
+export default pinia
 ```
 
 - 在 main.ts 中注册 pinia
 
 ```ts
 // main.ts
-import { createApp } from "vue";
-import pinia from "./store";
+import { createApp } from 'vue'
+import pinia from './store'
 
-createApp(App).use(pinia).mount("#app");
+createApp(App).use(pinia).mount('#app')
 ```
 
 - 创建 store
@@ -46,10 +56,10 @@ createApp(App).use(pinia).mount("#app");
 
 ```ts
 // store/counter.ts
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 
 export const useCounter = defineStore({
-  id: "counter",
+  id: 'counter',
   state: () => ({
     count: 0,
     a: 3,
@@ -57,9 +67,39 @@ export const useCounter = defineStore({
   }),
   // persist: true,
   persist: {
-    key: "counter",
+    key: 'counter',
     storage: localStorage,
-    paths: ["count", "a"],
+    paths: ['count', 'a'],
   },
-});
+})
 ```
+
+## `PersistConfig`属性
+
+```ts
+type PersistConfig = {
+  name?: string
+  storage?: PersistStorage
+}
+```
+
+| 属性名称 | 属性描述                                                                 |
+| -------- | ------------------------------------------------------------------------ |
+| name     | 存储数据的`key`, 默认是`pinia`                                           |
+| storage  | 存储方式`PersistStorage`, 默认是`localStorage`, 可选项: `sessionStorage` |
+
+## `PersistOptions`属性
+
+```ts
+type PersistOptions = {
+  key?: string
+  storage?: PersistStorage
+  paths?: string[]
+}
+```
+
+| 属性名称 | 属性描述                               |
+| -------- | -------------------------------------- |
+| key      | 属性表示存储的`key`，默认是`store.$id` |
+| storage  | 属性表示存储的`storage`，默认是`localStorage` |
+| paths    | 属性表示需要持久化的`state`中的属性，如果不设置或者为空数组，则持久化`state`中的所有属性 |
