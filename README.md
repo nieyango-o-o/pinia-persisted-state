@@ -1,6 +1,6 @@
 ## pinia-persisted-state
 
-## 说明(个人使用)
+## 说明
 
 #### pinia 本地持久化
 
