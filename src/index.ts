@@ -107,6 +107,7 @@ function createPersistedState(
   result && store.$patch(result)
 
   store.$subscribe(() => updateStorage(store, persistOptions))
+  updateStorage(store, persistOptions)
 }
 
 export default createPersistedState
