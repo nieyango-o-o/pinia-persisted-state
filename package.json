@@ -1,7 +1,7 @@
 {
   "name": "@jiuyue-/pinia-persisted-state",
   "description": "Persisted state for Pinia",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": "Jiuyue",
   "main": "dist/pinia-persisted-state.js",
   "module": "dist/pinia-persisted-state.esm.js",
