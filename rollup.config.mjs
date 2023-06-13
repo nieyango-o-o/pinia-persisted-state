@@ -22,5 +22,10 @@ export default defineConfig({
       format: 'esm',
     },
   ],
-  plugins: [resolve(), json(), typescript()],
+  plugins: [resolve(), json(), typescript({
+    tsconfig: './tsconfig.json',
+    declaration: true,
+    declarationDir: '.',
+    rootDir: './src',
+  })],
 })
